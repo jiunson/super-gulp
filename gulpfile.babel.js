@@ -3,6 +3,8 @@ import gpug from "gulp-pug";
 import del from "del";
 import ws from "gulp-webserver";
 import image from "gulp-image";
+import autoprefixer from "gulp-autoprefixer";
+import miniCSS from "gulp-csso";
 
 const sass = require('gulp-sass')(require('sass'));
 
@@ -27,7 +29,7 @@ const routes = {
 const pug = () => 
     gulp
     .src(routes.pug.src)
-    .pipe(gpug())
+    .pipe(gpug())                                   // pug 컴파일 
     .pipe(gulp.dest(routes.pug.dest));
 
 const clean = () => del(["build"]);
@@ -37,13 +39,15 @@ const webserver = () => gulp.src("build").pipe(ws({livereload: true, open: true}
 const img = () => 
     gulp
     .src(routes.img.src)
-    .pipe(image())
+    .pipe(image())                                  // 이미지 최적화.
     .pipe(gulp.dest(routes.img.dest));
 
 const styles = () =>
     gulp
     .src(routes.scss.src)
-    .pipe(sass().on("error", sass.logError))
+    .pipe(sass().on("error", sass.logError))        // css 컴파일 
+    .pipe(autoprefixer())                           // 하위 브라우저 호환코드 지원.
+    .pipe(miniCSS())                                // css파일 용량 최소화.
     .pipe(gulp.dest(routes.scss.dest));
 
 const watch = () => {
