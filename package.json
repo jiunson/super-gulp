@@ -13,8 +13,10 @@
     "@babel/core": "^7.20.2",
     "@babel/preset-env": "^7.20.2",
     "@babel/register": "^7.18.9",
+    "babelify": "^10.0.0",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^8.0.0",
+    "gulp-bro": "^2.0.0",
     "gulp-csso": "^4.0.1",
     "gulp-image": "^4.4.1",
     "gulp-pug": "^5.0.0",
@@ -23,7 +25,8 @@
     "sass": "^1.56.1"
   },
   "dependencies": {
-    "del": "^4.1.1"
+    "del": "^4.1.1",
+    "uglifyify": "^5.0.2"
   },
   "browserslist": [
     "last 2 version",
