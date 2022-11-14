@@ -36,7 +36,10 @@ const routes = {
 const pug = () => 
     gulp
     .src(routes.pug.src)
-    .pipe(gpug())                                   // pug 컴파일 
+    .pipe(gpug({
+        doctype: 'html',
+        pretty: true
+    }))                                   // pug 컴파일 
     .pipe(gulp.dest(routes.pug.dest));
 
 const clean = () => del(["build"]);
