@@ -7,6 +7,7 @@ import autoprefixer from "gulp-autoprefixer";
 import miniCSS from "gulp-csso";
 import bro from "gulp-bro";
 import babelify from "babelify";
+import ghPages from "gulp-gh-pages"
 
 const sass = require('gulp-sass')(require('sass'));
 
@@ -42,7 +43,7 @@ const pug = () =>
     }))                                   // pug 컴파일 
     .pipe(gulp.dest(routes.pug.dest));
 
-const clean = () => del(["build"]);
+const clean = () => del(["build", ".publish"]);
 
 const webserver = () => gulp.src("build").pipe(ws({livereload: true, open: true}));
 
@@ -70,7 +71,10 @@ const js = () =>
       }))
       .pipe(gulp.dest(routes.js.dest));
 
-const watch = () => {
+const ghDeploy = () => gulp.src("build/**/*").pipe(ghPages());
+
+// Watching
+const watch = () => { 
     gulp.watch(routes.pug.watch, pug);
     gulp.watch(routes.img.src, img);
     gulp.watch(routes.scss.watch, styles);
@@ -86,8 +90,10 @@ const prepare = gulp.series([clean, img]);
 const assets = gulp.series([pug, styles, js]);
 
 // 웹서버 실행하고 파일의 변동사항을 지켜본다. 
-const postDev = gulp.parallel([webserver, watch]);
+const live = gulp.parallel([webserver, watch]);
 
 // dev task를 순차적으로 실행한다.
 // export하지 않는다면, console이나 package.json에서 dev를 사용하지 못한다.
-export const dev = gulp.series([prepare, assets, postDev]);
+export const build = gulp.series([prepare, assets]);
+export const dev = gulp.series([build, live]);
+export const deploy = gulp.series([build, ghDeploy, clean]);
